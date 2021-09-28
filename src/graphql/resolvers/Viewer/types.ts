@@ -3,3 +3,7 @@ export interface LogInArgs {
         code: string
     } | null;
 }
+
+export interface ConnectStripeArgs {
+    input: { code: string };
+}
