@@ -71,7 +71,7 @@ export const typeDefs = gql`
     }
 
     input ConnectStripeInput {
-        code: String!
+        code: String! 
     }
 
     input HostListingInput {
