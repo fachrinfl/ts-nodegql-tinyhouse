@@ -6,6 +6,8 @@ import { Booking, Database, Listing, BookingsIndex, User } from '../../../lib/ty
 import { authorize } from '../../../lib/utils';
 import { CreateBookingArgs } from './types';
 
+const milisecondsPerDay = 86400000;
+
 const resolveBookingsIndex = (
     bookingsIndex: BookingsIndex,
     checkInDate: string,
@@ -69,8 +71,17 @@ export const bookingResolvers: IResolvers = {
                     throw new Error("viewer can't book own listing");
                 }
 
+                const today = new Date();
                 const checkInDate = new Date(checkIn);
                 const checkOutDate = new Date(checkOut);
+
+                if (checkInDate.getTime() > today.getTime() + 90 * milisecondsPerDay) {
+                    throw new Error("check in date can't be more than 90 days from today");
+                }
+
+                if (checkOutDate.getTime() > today.getTime() + 90 * milisecondsPerDay) {
+                    throw new Error("check out date can't be more than 90 days from today");
+                }
 
                 if (checkOutDate < checkInDate) {
                     throw new Error("check out date can't be before check in date");
@@ -82,7 +93,7 @@ export const bookingResolvers: IResolvers = {
                     checkOut
                 );
 
-                const totalPrice = listing.price * ((checkOutDate.getTime() - checkInDate.getTime()) / 86400000 + 1);
+                const totalPrice = listing.price * ((checkOutDate.getTime() - checkInDate.getTime()) / milisecondsPerDay + 1);
 
                 const host = await db.users.findOne({
                     _id: listing.host
