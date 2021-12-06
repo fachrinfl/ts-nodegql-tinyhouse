@@ -3,9 +3,12 @@
       "target": "es6",
       "module": "commonjs",
       "rootDir": "./src",
-      "outDir": "../tinyhouse-deploy/src",
+      "outDir": "./build",
       "esModuleInterop": true,
-      "strict": true
+      "strict": true,
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "strictPropertyInitialization": false
     },
     "exclude": ["temp"]
 }
